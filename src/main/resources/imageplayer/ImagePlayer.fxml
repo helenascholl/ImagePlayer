@@ -16,6 +16,7 @@
       <FlowPane alignment="CENTER" hgap="20.0" prefHeight="60.0" prefWidth="601.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" text="Start" fx:id="startButton" onAction="#onStartPressed"/>
+            <Button mnemonicParsing="false" text="Pause" fx:id="pauseButton" onAction="#onPausePressed"/>
             <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" />
             <Button mnemonicParsing="false" fx:id="loadButton" onAction="#onLoadButtonPressed" text="Load Image" />
             <Label fx:id="statusLabel" text="..." />

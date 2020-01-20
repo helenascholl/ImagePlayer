@@ -33,6 +33,9 @@ public class Controller implements Initializable {
     @FXML
     public Button loadButton;
 
+    private ImageDiscoverer imageDiscoverer;
+    private Thread discoverThread;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         statusLabel.setText("application started ...");
@@ -41,6 +44,15 @@ public class Controller implements Initializable {
     @FXML
     public void onStartPressed(ActionEvent actionEvent) {
         statusLabel.setText("on start button pressed ...");
+        // imageDiscoverer.discover();
+        discoverThread = new Thread(imageDiscoverer);
+        progressBar.setProgress(0);
+        discoverThread.start();
+    }
+
+    @FXML
+    public void onPausePressed(ActionEvent actionEvent) {
+        // insert your code here
     }
 
     @FXML
@@ -49,7 +61,9 @@ public class Controller implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("selectImage");
         fileChooser.setInitialDirectory(new File("."));
-        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png", "*.JPG", "*.PNG", "*.JPEG", "*.jpeg");
+        FileChooser.ExtensionFilter extensionFilter =
+                new FileChooser.ExtensionFilter("Image Files",
+                        "*.jpg", "*.png", "*.JPG", "*.PNG", "*.JPEG", "*.jpeg");
         fileChooser.getExtensionFilters().add(extensionFilter);
         File imageFile = fileChooser.showOpenDialog(null);
 
@@ -61,7 +75,8 @@ public class Controller implements Initializable {
     }
 
     private void setImage(Image image) {
-        imageView.setImage(image);
+        imageDiscoverer = new ImageDiscoverer(image, progressBar);
+        imageView.setImage(imageDiscoverer.getDestinationImage());
 
         int width = (int) image.getWidth();
         int height = (int) image.getHeight();

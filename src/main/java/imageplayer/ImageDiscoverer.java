@@ -16,6 +16,11 @@ public class ImageDiscoverer implements Runnable {
     private PixelWriter pixelWriter;
     private PixelReader pixelReader;
     private ProgressBar progressBar;
+    private boolean isPaused;
+
+    public void setPaused(boolean isPaused) {
+        this.isPaused = isPaused;
+    }
 
     public ImageDiscoverer(Image sourceImage, ProgressBar progressBar) {
         this.sourceImage = sourceImage;
@@ -25,6 +30,7 @@ public class ImageDiscoverer implements Runnable {
         destinationImage = new WritableImage(width, height);
         pixelWriter = destinationImage.getPixelWriter();
         pixelReader = sourceImage.getPixelReader();
+        isPaused = false;
         initImage();
     }
 
@@ -56,6 +62,16 @@ public class ImageDiscoverer implements Runnable {
                 Thread.sleep(30);
             } catch (InterruptedException e) {
                 System.err.println(e.getMessage());
+            }
+
+            synchronized (this) {
+                while (isPaused) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        System.err.println(e.getMessage());
+                    }
+                }
             }
         }
     }
